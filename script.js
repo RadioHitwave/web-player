@@ -8,14 +8,25 @@ $(document).ready(function () {
         $("#stream").trigger("play");
     });
 
+    var currentCoverUrl;
     function loadCoverImage() {
-        $("#cover img").attr("src", "https://streamdata.radiohitwave.com/cover/?image&_t=" + $.now());
+        $.get("https://streamdata.radiohitwave.com/api/?cover&string", function(newCoverUrl){
+           if (currentCoverUrl !== newCoverUrl){
+               $("#cover img").attr("src", newCoverUrl);
+               currentCoverUrl = newCoverUrl;
+           }
+        });
     }
 
     function loadTitle() {
-        $("#title").load("https://streamdata.radiohitwave.com/title/?_t=" + $.now(), function () {
+        $("#title").load("https://streamdata.radiohitwave.com/api/?title&_t=" + $.now(), function () {
             textFit($("#title"), {alignHoriz: true, alignVert: true, maxFontSize: 20});
         });
+    }
+
+    function ajax() {
+        loadTitle();
+        loadCoverImage();
     }
 
     $("#stream").on("play pause", function () {
@@ -37,13 +48,6 @@ $(document).ready(function () {
         }
     });
 
-    loadCoverImage();
-    setInterval(function () {
-        loadCoverImage()
-    }, 5000);
-
-    loadTitle();
-    setInterval(function () {
-        loadTitle()
-    }, 5000);
+    ajax();
+    setInterval(ajax, 5000);
 });

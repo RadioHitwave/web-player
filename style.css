@@ -35,6 +35,12 @@
         width: 30rem;
         float: left;
     }
+
+    #logo img {
+        width: 100%;
+        height: auto;
+        margin-top: 1.2rem;
+    }
 }
 
 @media screen and (max-width: 47rem) {
@@ -50,13 +56,21 @@
     }
 
     #logo {
-        height: 11rem;
         order: 1;
     }
 
-    #cover img {
-        height: 15rem;
+    #logo img {
+        height: auto;
+        width: auto;
         max-width: 100%;
+        max-height: 9rem;
+    }
+
+    #cover img {
+        height: auto;
+        width: auto;
+        max-width: 100%;
+        max-height: 20rem;
     }
 
     #cover {
@@ -79,8 +93,9 @@
 
 #logo {
     background: lightgrey;
-    background-image: url("logo.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain !important;
 }
+
+#cover img[src=""] {
+    display: none;
+}
+
