@@ -8,25 +8,12 @@ $(document).ready(function () {
         $("#stream").trigger("play");
     });
 
-    var currentCoverUrl;
-    function loadCoverImage() {
-        $.get("https://streamdata.radiohitwave.com/api/?cover&string", function(newCoverUrl){
-           if (currentCoverUrl !== newCoverUrl){
-               $("#cover img").attr("src", newCoverUrl);
-               currentCoverUrl = newCoverUrl;
-           }
-        });
-    }
-
-    function loadTitle() {
-        $("#title").load("https://streamdata.radiohitwave.com/api/?title&_t=" + $.now(), function () {
-            textFit($("#title"), {alignHoriz: true, alignVert: true, maxFontSize: 20});
-        });
-    }
-
     function ajax() {
-        loadTitle();
-        loadCoverImage();
+        $.getJSON("https://streamdata.radiohitwave.com/api/", function (data) {
+            $("#cover img").attr("src", data.cover);
+            $("#title").html(data.title);
+            textFit($("#title"), {alignHoriz: true, alignVert: true, maxFontSize: 22});
+        });
     }
 
     $("#stream").on("play pause", function () {
