@@ -2,6 +2,7 @@ $(document).ready(function () {
     textFit($("#play"), {alignHoriz: true, alignVert: true});
 
     var initialLoadingDone = false;
+    var originalDocumentTitle = document.title;
 
     $("#stream").on("canplay", function () {
         initialLoadingDone = true;
@@ -12,6 +13,7 @@ $(document).ready(function () {
         $.getJSON("https://streamdata.radiohitwave.com/api/", function (data) {
             $("#cover img").attr("src", data.cover);
             $("#title").html(data.title);
+            document.title = originalDocumentTitle + " | " + data.title;
             textFit($("#title"), {alignHoriz: true, alignVert: true, maxFontSize: 22});
         });
     }
