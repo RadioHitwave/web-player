@@ -1,3 +1,22 @@
+function getMediaAmplifier(mediaElem) {
+	var context = new (window.AudioContext || window.webkitAudioContext),
+		result = {
+			context: context,
+			source: context.createMediaElementSource(mediaElem),
+			gain: context.createGain(),
+			media: mediaElem,
+			amplify: function (ampLevel) {
+				result.gain.gain.value = ampLevel;
+			},
+			getAmpLevel: function () {
+				return result.gain.gain.value;
+			}
+		};
+	result.source.connect(result.gain);
+	result.gain.connect(context.destination);
+	return result;
+}
+
 $(document).ready(function () {
 	const $play = $("#play");
 	const $stream = $("#stream");
@@ -5,13 +24,17 @@ $(document).ready(function () {
 	const $cover = $("#cover img");
 	const $volume = $("#volumeSlider");
 
+	let streamAmplifier = null;
+
 	$volume.slider({
 		formatter: function (value) {
 			return 'Current value: ' + value;
 		}
 	});
 	$volume.on("slide", function (slideEvt) {
-		console.log(slideEvt.value);
+		if (streamAmplifier === null)
+			streamAmplifier = getMediaAmplifier($stream[0]);
+		streamAmplifier.amplify(slideEvt.value / 100);
 	});
 
 	textFit($play, {alignHoriz: true, alignVert: true});
@@ -36,13 +59,13 @@ $(document).ready(function () {
 	const playIcon = $("#play i");
 	$stream.on("play pause", function () {
 		if (!initialLoadingDone) {
+			$volume.slider("enable");
 			playIcon.addClass("fa-spin fa-spinner");
 			return;
 		}
 		playIcon.toggleClass("fa-play fa-pause");
 		playIcon.removeClass("fa-spin fa-spinner");
 	});
-
 
 	$play.click(function () {
 		const nativeStream = $stream[0];

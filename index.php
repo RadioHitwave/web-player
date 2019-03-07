@@ -15,11 +15,13 @@
 		<div id="play"><i class="fas fa-play"></i></div>
 		<div id="volume">
 			<form>
-				<input id="volumeSlider" data-slider-id='volumeSlider' type="text" data-slider-min="0" data-slider-max="200" data-slider-step="1" data-slider-value="100"/>
+				<input data-slider-enabled="false" id="volumeSlider" data-slider-id='volumeSlider' type="text"
+					   data-slider-min="0" data-slider-max="200" data-slider-step="1" data-slider-value="100"/>
 			</form>
 		</div>
 		<div id="title"></div>
-		<audio id="stream" src="https://stream-public.radiohitwave.com/stream?nocache" preload="none" title="Radio Hitwave"></audio>
+		<audio id="stream" src="https://stream-public.radiohitwave.com/stream?nocache" crossorigin="anonymous"
+			   preload="none" title="Radio Hitwave"></audio>
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
