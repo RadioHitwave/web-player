@@ -1,42 +1,60 @@
 $(document).ready(function () {
-    textFit($("#play"), {alignHoriz: true, alignVert: true});
+	const $play = $("#play");
+	const $stream = $("#stream");
+	const $title = $("#title");
+	const $cover = $("#cover img");
+	const $volume = $("#volumeSlider");
 
-    var initialLoadingDone = false;
-    var originalDocumentTitle = document.title;
+	$volume.slider({
+		formatter: function (value) {
+			return 'Current value: ' + value;
+		}
+	});
+	$volume.on("slide", function (slideEvt) {
+		console.log(slideEvt.value);
+	});
 
-    $("#stream").on("canplay", function () {
-        initialLoadingDone = true;
-        $("#stream").trigger("play");
-    });
+	textFit($play, {alignHoriz: true, alignVert: true});
 
-    function ajax() {
-        $.getJSON("https://streamdata.radiohitwave.com/api/", function (data) {
-            $("#cover img").attr("src", data.cover);
-            $("#title").html(data.title);
-            document.title = originalDocumentTitle + " | " + data.title;
-            textFit($("#title"), {alignHoriz: true, alignVert: true, maxFontSize: 22});
-        });
-    }
+	var initialLoadingDone = false;
+	var originalDocumentTitle = document.title;
 
-    $("#stream").on("play pause", function () {
-        if (!initialLoadingDone) {
-            $("#play i").addClass("fa-spin fa-spinner");
-            return;
-        }
-        $("#play i").toggleClass("fa-play fa-pause");
-        $("#play i").removeClass("fa-spin fa-spinner");
-    });
+	$stream.on("canplay", function () {
+		initialLoadingDone = true;
+		$("#stream").trigger("play");
+	});
+
+	function ajax() {
+		$.getJSON("https://streamdata.radiohitwave.com/api/", function (data) {
+			$cover.attr("src", data.cover);
+			$title.html(data.title);
+			document.title = originalDocumentTitle + " | " + data.title;
+			textFit($title, {alignHoriz: true, alignVert: true, maxFontSize: 22});
+		});
+	}
+
+	const playIcon = $("#play i");
+	$stream.on("play pause", function () {
+		if (!initialLoadingDone) {
+			playIcon.addClass("fa-spin fa-spinner");
+			return;
+		}
+		playIcon.toggleClass("fa-play fa-pause");
+		playIcon.removeClass("fa-spin fa-spinner");
+	});
 
 
-    $("#play").click(function () {
-        $stream = $("#stream")[0];
-        if ($stream.paused) {
-            $stream.play();
-        } else if ($stream.readyState >= 3) {
-            $stream.pause();
-        }
-    });
+	$play.click(function () {
+		const nativeStream = $stream[0];
+		if (nativeStream.paused) {
+			nativeStream.play();
+		} else if (nativeStream.readyState >= 3) {
+			nativeStream.pause();
+		}
+	});
 
-    ajax();
-    setInterval(ajax, 5000);
+	ajax();
+	setInterval(ajax, 5000);
+
+	setTimeout(() => $("body").css("visibility", "visible"), 100);
 });
