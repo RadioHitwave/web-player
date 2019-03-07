@@ -24,6 +24,14 @@ $(document).ready(function () {
 	const $cover = $("#cover img");
 	const $volume = $("#volumeSlider");
 
+	function prepareVolume() {
+		let volume = localStorage.getItem("player.volume");
+		if (volume === null)
+			volume = 100;
+
+		$volume.slider('setValue', volume, true);
+	}
+
 	let streamAmplifier = null;
 
 	$volume.slider({
@@ -32,6 +40,7 @@ $(document).ready(function () {
 		}
 	});
 	$volume.on("slide", function (slideEvt) {
+		localStorage.setItem("player.volume", slideEvt.value);
 		if (streamAmplifier === null)
 			streamAmplifier = getMediaAmplifier($stream[0]);
 		streamAmplifier.amplify(slideEvt.value / 100);
@@ -67,7 +76,7 @@ $(document).ready(function () {
 		playIcon.removeClass("fa-spin fa-spinner");
 	});
 
-	$play.click(function () {
+	$play.on("click", function () {
 		const nativeStream = $stream[0];
 		if (nativeStream.paused) {
 			nativeStream.play();
@@ -79,5 +88,8 @@ $(document).ready(function () {
 	ajax();
 	setInterval(ajax, 5000);
 
-	setTimeout(() => $("body").css("visibility", "visible"), 100);
+	setTimeout(() => {
+		prepareVolume();
+		$("body").css("visibility", "visible");
+	}, 100);
 });
