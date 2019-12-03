@@ -13,12 +13,6 @@
 		<div id="cover"><img src="" alt="cover"/></div>
 		<div id="logo"><img src="logo.png" alt="cover"/></div>
 		<div id="play"><i class="fas fa-play"></i></div>
-		<div id="volume">
-			<form>
-				<input data-slider-enabled="false" id="volumeSlider" data-slider-id='volumeSlider' type="text"
-					   data-slider-min="0" data-slider-max="200" data-slider-step="1" data-slider-value="100"/>
-			</form>
-		</div>
 		<div id="title"></div>
 		<audio id="stream" src="https://stream-public.radiohitwave.com/stream?nocache" crossorigin="anonymous"
 			   preload="none" title="Radio Hitwave"></audio>

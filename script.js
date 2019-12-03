@@ -1,50 +1,8 @@
-function getMediaAmplifier(mediaElem) {
-	var context = new (window.AudioContext || window.webkitAudioContext),
-		result = {
-			context: context,
-			source: context.createMediaElementSource(mediaElem),
-			gain: context.createGain(),
-			media: mediaElem,
-			amplify: function (ampLevel) {
-				result.gain.gain.value = ampLevel;
-			},
-			getAmpLevel: function () {
-				return result.gain.gain.value;
-			}
-		};
-	result.source.connect(result.gain);
-	result.gain.connect(context.destination);
-	return result;
-}
-
 $(document).ready(function () {
 	const $play = $("#play");
 	const $stream = $("#stream");
 	const $title = $("#title");
 	const $cover = $("#cover img");
-	const $volume = $("#volumeSlider");
-
-	function prepareVolume() {
-		let volume = localStorage.getItem("player.volume");
-		if (volume === null)
-			volume = 100;
-
-		$volume.slider('setValue', volume, true);
-	}
-
-	let streamAmplifier = null;
-
-	$volume.slider({
-		formatter: function (value) {
-			return 'Current value: ' + value;
-		}
-	});
-	$volume.on("slide", function (slideEvt) {
-		localStorage.setItem("player.volume", slideEvt.value);
-		if (streamAmplifier === null)
-			streamAmplifier = getMediaAmplifier($stream[0]);
-		streamAmplifier.amplify(slideEvt.value / 100);
-	});
 
 	textFit($play, {alignHoriz: true, alignVert: true});
 
@@ -68,7 +26,6 @@ $(document).ready(function () {
 	const playIcon = $("#play i");
 	$stream.on("play pause", function () {
 		if (!initialLoadingDone) {
-			$volume.slider("enable");
 			playIcon.addClass("fa-spin fa-spinner");
 			return;
 		}
@@ -89,7 +46,6 @@ $(document).ready(function () {
 	setInterval(ajax, 5000);
 
 	setTimeout(() => {
-		prepareVolume();
 		$("body").css("visibility", "visible");
 	}, 100);
 });

@@ -10,16 +10,9 @@
 		cursor: pointer;
 	}
 
-	#volume {
-		background: #ccc;
-		width: 10rem;
-		height: 4rem;
-		float: left;
-	}
-
 	#title {
 		background: #28e400;
-		width: 33rem;
+		width: 43rem;
 		height: 4rem;
 		float: left;
 		color: white;
@@ -96,33 +89,6 @@
 		order: 4;
 		background: #999;
 	}
-
-	#volume {
-		background: #ccc;
-		height: 4rem;
-		order: 5;
-	}
-}
-
-#volume {
-	padding: 0 15px;
-}
-
-#volume form {
-	height: 100%;
-}
-
-#volume .slider-horizontal {
-	width: 100%;
-	height: 100%;
-}
-
-#volume .slider-handle {
-	top: 35%;
-}
-
-#volume .slider-selection {
-	background: #edc900;
 }
 
 #logo, #cover {
